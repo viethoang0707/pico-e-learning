@@ -1,0 +1,35 @@
+<main class="auth-main" layout="column" layout-align="center center" ng-keypress="loginMeetingKeyPress($event)">
+  <div class="auth-block">
+    <div class="md-display-1 vi-center auth-room-logo">
+      <img src="assets/images/logo_trananh.jpg" alt="">
+    </div>
+    <form name="authMeetingForm">
+      <md-input-container class="md-block">
+        <label>RoomId</label>
+        <input name="roomId" ng-model="meetingAuth.meetingId" required>
+        <div ng-messages="authMeetingForm.roomId.$error">
+          <div ng-message="required">{{"auth.required" | translate}}</div>
+        </div>
+      </md-input-container>
+      <md-input-container class="md-block">
+        <label>Email</label>
+        <input name="email" ng-model="meetingAuth.email" required>
+        <div ng-messages="authMeetingForm.email.$error">
+          <div ng-message="required">{{"auth.required" | translate}}</div>
+        </div>
+      </md-input-container>
+      <md-input-container class="md-block">
+        <label>{{"auth.password" | translate}}</label>
+        <input name="password" type="password" ng-model="meetingAuth.password" required>
+        <div ng-messages="authMeetingForm.password.$error">
+          <div ng-message="required">{{"auth.required" | translate}}</div>
+        </div>
+      </md-input-container>
+      <md-radio-group ng-model="meetingAuth.kind" layout="row" class="md-block">
+        <md-radio-button flex value="training" class="md-primary">Training</md-radio-button>
+        <md-radio-button flex value="conference" class="md-primary">Conference</md-radio-button>        
+      </md-radio-group>
+      <md-button ng-click="loginMeeting()" class="md-raised md-primary vi-btn-reset btn-login">{{"auth.login" | translate}}</md-button>
+    </form>
+  </div>
+</main>

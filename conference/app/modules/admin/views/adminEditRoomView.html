@@ -1,0 +1,132 @@
+<div style="width: 100%;" ng-include="'app/modules/admin/views/shared/toolbarView.html'"></div>
+
+<div layout="row" flex>
+  <md-sidenav 
+    class="md-whiteframe-2dp md-sidenav-left vi-sidenav"
+    md-component-id="left" 
+    md-is-locked-open="$mdMedia('gt-sm')"
+    md-whiteframe="4">
+    <div style="width: 100%;" ng-include="'app/modules/admin/views/shared/roomsListView.html'"></div>
+  </md-sidenav>
+
+  <md-content flex id="content">
+    <div layout="row">
+      <h3 class="md-display-1 vi-row vi-headline">{{"admin.roomsList.editTitle" | translate}} "{{room.name}}"</h3>
+    </div>
+
+    <div layout="row" class="room-info vi-row vi-col">     
+
+      <md-tabs flex md-dynamic-height md-border-bottom>
+        <md-tab label="{{'admin.roomsList.room' | translate}}">
+          <md-content class="md-padding">
+            <div style="width: 100%;" ng-include="'app/modules/admin/views/shared/roomFormView.html'"></div>
+          </md-content>
+        </md-tab>
+        <md-tab label="{{'admin.roomsList.member' | translate}}">
+          <md-content class="md-padding">
+            <h3 class="md-title">{{"admin.roomsList.totalMembers" | translate}}: {{membersList.length | number}}</h3>
+
+            <div layout="row">
+              <div flex="30">
+                <div class="vi-panel">
+                  <md-list class="vi-members-list">
+                    <md-list-item class="md-2-line " ng-repeat="member in membersList" ng-click="showMemberDetail(member)">
+                      <div class="md-list-item-text vi-member-item">
+                          <h3 class="md-title vi-member-name">{{member.name}}</h3>
+                          <p class="vi-member-email">{{member.role}}</p>
+                      </div>
+                    </md-list-item>
+                  </md-list>
+                  <p style="text-align:center" ng-show="membersList.length == 0">{{"admin.roomsList.addMemberMsg" | translate}}</p>
+                </div>
+              </div>
+
+              <div flex="70" class="vi-row">
+                <!-- Begin btn group -->
+                <div layout="row" class="vi-btn-group-member">
+                  <div flex="70" layout="row" layout-align="start">     
+                    <md-button class="md-raised vi-btn vi-warn" ng-click="showEditMemberForm();" style="margin-left: 0;">
+                      <i class="fa fa-pencil" aria-hidden="true"></i> {{"admin.roomsList.edit" | translate}}
+                    </md-button>
+                    <md-button class="md-raised vi-btn vi-success" ng-click="showAddMemberForm();">
+                      <i class="fa fa-plus" aria-hidden="true"></i> {{"admin.roomsList.add" | translate}}
+                    </md-button>
+                  </div> 
+                  <div flex="30" layout="row" layout-align="end">
+                    <md-button class="md-raised vi-btn vi-danger" style="margin-right: 0;" ng-click="removeMember();">
+                      <i class="fa fa-times" aria-hidden="true"></i> {{"admin.roomsList.add" | translate}}
+                    </md-button>
+                  </div>
+                </div><!-- End btn group -->
+
+                <!-- Begin user info panel -->
+                <div class="vi-panel">
+                  <div ng-show="!showMemberForm"">
+                    <md-list ng-show="member">
+                      <md-list-item layout="row" class="md-1-line">
+                        <div flex="20" class="vi-title">{{"admin.roomsList.memberName" | translate}}</div>
+                        <div flex="80">{{member.name}}</div>
+                      </md-list-item>
+                      <md-list-item layout="row" class="md-1-line">
+                        <div flex="20" class="vi-title">{{"admin.roomsList.memberRole" | translate}}</div>
+                        <div flex="80">{{member.name}}</div>
+                      </md-list-item>
+                      <md-list-item layout="row" class="md-1-line">
+                        <div flex="20" class="vi-title">Email</div>
+                        <div flex="80">{{member.email}}</div>
+                      </md-list-item>
+                    </md-list>
+                    <p style="text-align:center" ng-show="!member">{{"admin.roomsList.chooseMember" | translate}}</p>
+                  </div>                  
+
+                  <!-- Begin form edit user -->
+                  <form name="memberForm" ng-show="showMemberForm" class="vi-col">
+                    <div layout="row">
+                      <md-input-container flex="60" class="md-block">
+                        <label>{{"admin.roomsList.memberName" | translate}}</label>
+                        <input name="name" ng-model="member.name" required>
+                        <div ng-messages="memberForm.name.$error">
+                          <div ng-message="required">This is required!</div>
+                        </div>
+                      </md-input-container>
+                      <md-input-container flex class="md-block">
+                        <label>{{"admin.roomsList.memberRole" | translate}}</label>
+                        <md-select ng-model="member.role">
+                          <md-option value="presenter">Presenter</md-option>
+                          <md-option value="member">Member</md-option>
+                        </md-select>
+                      </md-input-container>
+                    </div>
+                    <div layout="row">
+                      <md-input-container flex="60" class="md-block">
+                        <label>Email</label>
+                        <input name="email" ng-model="member.email" required>
+                        <div ng-messages="memberForm.email.$error">
+                          <div ng-message="required">{{"admin.roomsList.required" | translate}}</div>
+                        </div>
+                      </md-input-container>
+                      <md-input-container flex class="md-block">
+                        <label>{{"auth.password" | translate}}</label>
+                        <input name="password" type="password" ng-model="member.password" required>
+                        <div ng-messages="memberForm.password.$error && !member.password">
+                          <div ng-message="required">{{"admin.roomsList.required" | translate}}</div>
+                        </div>
+                      </md-input-container>
+                    </div>
+                    <div layout="row">
+                      <md-button ng-click="cancelMember()" class="md-raised vi-btn vi-danger">{{"admin.roomsList.cancel" | translate}}</md-button>
+                      <md-button ng-click="saveMember()" class="md-raised md-primary">{{"admin.roomsList.save" | translate}}</md-button>
+                    </div>
+                  </form><!-- End form edit user --> 
+
+                </div><!-- End user info panel -->                                
+              </div>
+            </div>
+          </md-content>
+        </md-tab>
+      </md-tabs>
+
+    </div>    
+
+  </md-content>
+</div>

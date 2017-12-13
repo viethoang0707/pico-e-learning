@@ -1,0 +1,28 @@
+<canvas 
+    data-type="radial-gauge" 
+    data-width="200" 
+    data-height="200" 
+    data-units="Mb/s" 
+    data-title="{{speedDownMbps}} Mbps" 
+    data-value="{{speedDownMbps}}"  
+    data-min-value="0" 
+    data-max-value="{{max}}" 
+    data-major-ticks="0, 10, 20, 30, 40, {{max}}",
+    data-highlights='[
+            { "from": 0, "to": 10, "color": "rgba(250,104,0,1 )" },
+            { "from": 10, "to": 20, "color": "rgba(240,163,10,1 )" },        
+            { "from": 20, "to": 50, "color": "rgba(164,196,0,1 )" }            
+        ]' 
+    data-minor-ticks="{{scale}}" 
+    data-stroke-ticks="false" 
+    data-highlights="false" 
+    data-value-box="false">
+</canvas>
+<div><span class="vi-right" style="min-width: 50px; font-weight: bold; display: inline-block;">{{(speedDownMbpsAvg == 0) ? '' : speedDownMbpsAvg}}</span>Mbps</div>
+<md-button class="md-raised md-primary"
+    ng-click="measureDownloadSpeedAverage()">
+    <i class="fa fa-clock-o" aria-hidden="true"></i>
+    <span>{{'general.testSpeed' | translate}}</span>
+</md-button>
+
+

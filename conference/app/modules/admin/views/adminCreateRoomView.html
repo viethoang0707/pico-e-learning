@@ -1,0 +1,22 @@
+<div style="width: 100%;" ng-include="'app/modules/admin/views/shared/toolbarView.html'"></div>
+
+<div layout="row" flex>
+  <md-sidenav 
+    class="md-whiteframe-2dp md-sidenav-left vi-sidenav"
+    md-component-id="left" 
+    md-is-locked-open="$mdMedia('gt-sm')"
+    md-whiteframe="4">
+    <div style="width: 100%;" ng-include="'app/modules/admin/views/shared/roomsListView.html'"></div>
+  </md-sidenav>
+
+  <md-content flex id="content">
+    <div layout="row">
+      <h3 class="md-display-1 vi-row vi-headline">{{"admin.roomsList.createTitle" | translate}}</h3>
+    </div>
+
+    <div layout="row" class="room-info vi-row vi-col">   
+      <div style="width: 100%;" ng-include="'app/modules/admin/views/shared/roomFormView.html'"></div>
+    </div>    
+
+  </md-content>
+</div>

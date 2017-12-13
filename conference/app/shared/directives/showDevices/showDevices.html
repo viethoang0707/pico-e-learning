@@ -1,0 +1,67 @@
+<div layout="row" class="item-device">
+    <div flex="30">Webcam</div>
+    <div flex="70">
+        <i class="fa fa-check-circle" ng-class="{'enable-device': (videoDevices > 0)}" aria-hidden="true"></i>
+        <span ng-show="videoDevices <= 0">{{'general.notAvailable' | translate}}</span>
+    </div>
+</div>
+<md-divider></md-divider>
+<div layout="row" class="item-device">
+    <div flex="30">Audio</div>
+    <div flex="70">
+        <i class="fa fa-check-circle" ng-class="{'enable-device': (audioInputDevices > 0)}" aria-hidden="true"></i>
+        <span ng-show="audioInputDevices <= 0">{{'general.notAvailable' | translate}}</span>
+    </div>
+</div>
+<!-- <md-divider></md-divider> -->
+<!-- <div layout="row">
+    <div flex="30">Speaker</div>
+    <div flex="70">
+        <i class="fa fa-check-circle" ng-class="{'enable-device': (audioOutputDevices > 0)}" aria-hidden="true"></i>
+        {{audioOutputDevices}}
+    </div>
+</div> -->
+<!-- <div class="main">
+    <div class="row">
+        <div class="title">Number of audio/video devices available:</div><div class="content">{{allDevices}}</div>
+    </div>
+    <div class="row">
+        <div class="title">Number of video devices available: </div><div class="content">{{videoDevices}}</div>                           
+    </div>
+    <div class="row">
+        <div class="title">Number of audio devices available: </div><div class="content">{{audioDevices}}</div>                           
+    </div>
+    <div class="row">
+        <div class="title">Number of video-input devices available: </div><div class="content">{{videoInputDevices}}</div>                           
+    </div>
+    <div class="row">
+        <div class="title">Number of audio-input devices available: </div><div class="content">{{audioInputDevices}}</div>           
+    </div>
+    <div class="row">
+        <div class="title">Number of audio-output devices available: </div><div class="content">{{audioOutputDevices}}</div>                           
+    </div>     
+    <div class="row">
+        <div>All audio input devices:</div>
+    </div>
+    <div ng-repeat="deviceAudioInputName in audioInputDevicesName">
+        <div class="row">
+            <div class="title">Audio input device name: </div><div class="content">{{deviceAudioInputName.label}}</div>
+        </div>
+    </div>
+    <div class="row">
+        <div>All video input devices:</div>
+    </div>
+    <div ng-repeat="deviceVideoInputName in deviceVideoInputName">
+        <div class="row">
+            <div class="title">Audio output device name: </div><div class="content">{{deviceVideoInputName.label}}</div>
+        </div>
+    </div>
+    <div class="row">
+        <div>All audio output devices:</div>
+    </div>
+    <div ng-repeat="deviceAudioOutputName in audioOutputDevicesName">
+        <div class="row">
+            <div class="title">Audio output device name: </div><div class="content">{{deviceAudioOutputName.label}}</div>
+        </div>
+    </div>
+</div> -->

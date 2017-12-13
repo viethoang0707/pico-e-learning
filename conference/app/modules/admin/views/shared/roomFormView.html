@@ -1,0 +1,38 @@
+<form name="creatRoomForm">
+  <md-input-container class="md-block">
+    <label>{{"admin.roomsList.nameRoom" | translate}}</label>
+    <input name="name" type="text" ng-model="room.name" required>
+    <div ng-messages="creatRoomForm.name.$error">
+      <div ng-message="required">{{"admin.roomsList.required" | translate}}</div>
+    </div>
+  </md-input-container>
+
+  <md-input-container class="md-block">
+    <label>Room Refercence</label>
+    <input name="meetingRef" type="text" ng-model="room.meetingRef" required>
+    <div ng-messages="creatRoomForm.meetingRef.$error">
+      <div ng-message="required">{{"admin.roomsList.required" | translate}}</div>
+    </div>
+  </md-input-container>
+
+  <md-input-container class="md-block">
+    <label>{{"admin.roomsList.duration" | translate}}</label>
+    <input name="duration" type="number" ng-model="room.duration" required>
+    <div ng-messages="creatRoomForm.duration.$error">
+      <div ng-message="required">{{"admin.roomsList.required" | translate}}</div>
+    </div>
+  </md-input-container>
+
+  <md-input-container class="md-block">
+    <label>Logout Url</label>
+    <input name="logoutUrl" type="text" ng-model="room.logoutUrl">
+  </md-input-container>
+
+  <md-input-container class="md-block">
+    <label>Webcome title</label>
+    <input name="welcome" type="text" ng-model="room.welcome">
+  </md-input-container>
+  
+  <md-button ng-click="cancel()" class="md-raised vi-btn vi-danger">{{"admin.roomsList.cancel" | translate}}</md-button>
+  <md-button ng-click="save()" class="md-raised md-primary">{{"admin.roomsList.save" | translate}}</md-button>
+</form>

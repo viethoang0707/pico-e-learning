@@ -1,0 +1,24 @@
+<main class="auth-main" layout="column" layout-align="center center" ng-keypress="loginAccountKeyPress($event)">
+  <div class="auth-block">
+    <div class="md-display-1 vi-center auth-admin-logo">
+      <img src="assets/images/logo_trananh.jpg" alt="">
+    </div>
+    <form name="authForm">
+      <md-input-container class="md-block">
+        <label>Email</label>
+        <input name="email" ng-model="auth.emailLogin" required>
+        <div ng-messages="authForm.email.$error">
+          <div ng-message="required">{{"auth.required" | translate}}</div>
+        </div>
+      </md-input-container>
+      <md-input-container class="md-block">
+        <label>{{"auth.password" | translate}}</label>
+        <input name="password" type="password" ng-model="auth.passwordLogin" required>
+        <div ng-messages="authForm.password.$error">
+          <div ng-message="required">{{"auth.required" | translate}}</div>
+        </div>
+      </md-input-container>
+      <md-button ng-click="loginAccount()" class="md-raised md-primary vi-btn-reset">{{"auth.login" | translate}}</md-button>
+    </form>
+  </div>
+</main>

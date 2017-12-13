@@ -1,0 +1,11 @@
+<md-list class="rooms-list">
+  <md-list-item ng-repeat="room in roomsList">
+    <span style="margin-top: -15px;" ng-class="room.active ? 'fa fa-circle vi-online' : 'fa fa-circle vi-offline'" aria-hidden="true"></span>
+    <md-button ng-click="showRoomDetail(room)">
+      <h3 class="md-title">{{room.name}}</h3>
+      <div class="room-status-group">
+        <span>RefId: {{room.meetingRef}}</span>
+      </div>
+    </md-button>
+  </md-list-item>       
+</md-list>

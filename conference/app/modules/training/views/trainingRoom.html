@@ -1,0 +1,348 @@
+<!-- Start toolbar -->
+<md-toolbar layout="row" class="md-toolbar-tools vi-toolbar">
+    <div flex="30">
+        <!-- <button hide-gt-sm class="vi-center menuBtn" ng-click="toggleSidenav('left')" aria-label="Toggle Menu">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+        </button> -->
+        <img src="assets/images/logo_trananh_blue.png" alt="Trananh" style="width: 200px;">
+    </div>
+    <div flex="40" flex-sm="40" flex-xs="40" class="vi-center">
+        <h2 class="md-display-1 vi-logo">{{meeting.name}}</h2>
+    </div>
+    <div flex="30" class="vi-right">
+        <ul class="list-inline vi-nav-right">
+            <li class="vi-nav-right-item"
+                ng-show="me.profile.role=='presenter'"
+                ng-click="endLesson()">
+                <i class="fa fa-hourglass-end" aria-hidden="true"></i>
+                <span>{{"training.endLesson" | translate}}</span>
+            </li>
+            <li ng-click="leave()" class="vi-nav-right-item">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                <span>{{"training.logout" | translate}}</span>
+            </li>
+        </ul>
+    </div>
+</md-toolbar>
+<!-- End toolbar -->
+
+<div layout="row" flex style="height: 100%;">    
+    <!-- Start sidebar -->
+    <md-sidenav
+        class="md-sidenav-left vi-sidenav"
+        md-component-id="left"
+        md-is-locked-open="$mdMedia('min-width: 280px')"
+        ng-show="!fullScreen"> 
+        <div class="panel panel-info"
+            style="height: 100%; padding: 0px; margin: 0px">
+            <div class="localCameraDiv box" style="width: 100%;">
+                <div align=center class="web-cam">
+                    <video id="localCamera" autoplay muted  poster="assets/images/avatar-03.png"></video>
+                </div>
+
+                <div class="btn-local-group-video vi-center">
+                    <span ng-click="toggleAudio()"
+                        class="vi-icon"
+                        ng-class="audio?'icon-on':'icon-off'"
+                        style="cursor: pointer">
+                        <i class="fa fa-microphone"></i>
+                        <md-tooltip>
+                            {{video ? 'training.offVolume' : 'training.offVolume' | translate}}
+                        </md-tooltip>
+                    </span>
+                    &nbsp;
+                    <span ng-click="toggleVideo()"
+                        class="vi-icon"
+                        ng-class="video?'icon-on':'icon-off'"
+                        style="cursor: pointer">
+                        <i class="fa fa-camera"></i>
+                        <md-tooltip>
+                            {{video ? 'training.offCamera' : 'training.onCamera' | translate}}
+                        </md-tooltip>
+                    </span>
+                    &nbsp;
+                    <span ng-click="toggleHand()"
+                        ng-show="me.profile.role!='presenter'"
+                        class="vi-icon"
+                        ng-class="handUp?'icon-on':'icon-off'"
+                        style="cursor: pointer">
+                        <i class="fa fa-hand-paper-o"></i>
+                    </span>             
+                </div>
+
+                <div class="vi-center">
+                    <md-button class="md-fab md-mini" aria-label="Connect"
+                        ng-click="connect()"
+                        ng-disabled='me.pubState'
+                        ng-class="'btn-icon-on'">
+                        <i class="fa fa-volume-control-phone"></i>
+                        <md-tooltip>
+                            {{ 'training.connect' | translate}}
+                        </md-tooltip> 
+                    </md-button>   
+                    <md-button class="md-fab md-mini" aria-label="Disconnect"
+                        ng-click="disconnect()"
+                        ng-disabled='!me.pubState'
+                        ng-class="'btn-icon-off'">
+                        <i class="glyphicon glyphicon-phone-alt"></i>
+                        <md-tooltip>
+                            {{ 'training.disconnect'  | translate}}
+                        </md-tooltip> 
+                    </md-button> 
+                </div>
+            </div>
+            <div class="panel-body"
+                style="height: 100%;">
+                <ul class="list-unstyled members-list-room box">
+                    <li class="title">{{"training.presenter" | translate}}</li>
+                    <li class="content">
+                        <span
+                            ng-class="presenter.online ? 'fa fa-circle vi-online' : 'fa fa-circle vi-offline'" aria-hidden="true"></span>
+                        {{presenter.profile.name}}
+                    </li>
+                    <li class="title">
+                        {{"training.learners" | translate}}
+                        <span ng-show="me.profile.role=='presenter'"
+                            class="fa fa-hand-paper-o btn-handup"
+                            ng-class="!notiHandUp ? 'icon-on animated infinite bounce' : 'icon-off'"
+                            style="cursor: pointer; float: right; margin-left: 10px"
+                            aria-hidden="true"
+                            ng-click=""></span>
+                    </li>
+                    <li class="content" style="position: relative"
+                        ng-repeat="viewer in viewerList">
+                        <span
+                            ng-class="viewer.online ? 'fa fa-circle vi-online' : 'fa fa-circle vi-offline'" aria-hidden="true"></span>
+                        {{viewer.profile.name}}
+                        <span ng-show="me.profile.role=='presenter'"
+                            class="fa fa-video-camera"
+                            ng-class="viewer.invited ? 'icon-on' : 'icon-off'"
+                            style="cursor: pointer; float: right; margin-left: 10px"
+                            aria-hidden="true"
+                            ng-click="memberInvite(viewer.id)"></span>
+                        <span ng-show="me.profile.role=='presenter'"
+                            class="fa fa-hand-paper-o btn-handup"
+                            ng-class="viewer.handUp ? 'icon-on animated infinite bounce' : 'icon-off'"
+                            style="cursor: pointer; float: right; margin-left: 10px"
+                            aria-hidden="true"
+                            ng-click=""></span>
+                    </li>
+                </ul>
+     
+            </div>
+        </div>
+    </md-sidenav>
+    <!-- End sidebar -->
+    
+    <section layout="row" flex class="content-wrapper content-wrapper-training">
+        <!-- <div class="overlay" ng-show="!me.pubState"></div> -->
+        
+        <div class="main-content main-content-training vi-custom-tabs" flex>
+            <span class="btn-size" ng-click=changeSizeSlide()>
+                <i class="fa fa-arrows-alt" aria-hidden="true" ng-show="!fullScreen"></i>
+                <img style="width: 15px; height: 15px;" src="assets/images/minimize.png" alt="maximize" ng-show="fullScreen">
+            </span>
+            <div class="box vi-full-height">
+                <md-tabs md-dynamic-height="false">
+                  <md-tab label="{{'training.presentation' | translate}}">
+                    <md-content class="md-padding">
+                        <!-- Start conference board -->
+                        <div class="my-pdf-container">                    
+                            <div class="pdf-content box vi-center" style="height: calc(100% - 55px); overflow: auto;">
+                                <pdf-viewer
+                                    delegate-handle="my-pdf-container"
+                                    url="pdfUrl"
+                                    scale=".9"
+                                    show-toolbar="false"
+                                    headers="{ 'x-you-know-whats-awesome': 'EVERYTHING' }"></pdf-viewer>
+                            </div>
+                            <div class="toolbar-pdf-viewer box" layout="row">
+                                <div flex="30" 
+                                     ng-show="me.profile.role=='presenter'">
+                                    <md-button class="md-raised vi-success vi-btn" ngf-select="uploadPresentation($file)" ngf-max-size="10MB">
+                                        <i class="fa fa-upload" aria-hidden="true"></i>
+                                        {{"training.upload" | translate}}
+                                    </md-button>
+                                </div>
+                                <div flex="40" class="vi-center"
+                                     ng-show="me.profile.role=='presenter'">                    
+                                    <md-button class="md-raised vi-btn-default" 
+                                        ng-click="pdfSwitchPage(-1)">
+                                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                                    </md-button>                        
+                                    <input type="text" class="vi-input vi-pdf-input" 
+                                        ng-value="currPage + '/' + totalPages">
+                                
+                                    <md-button class="md-raised vi-btn-default" 
+                                        ng-click="pdfSwitchPage(1)">
+                                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                    </md-button>                        
+                                </div>
+                                <div flex="30" ng-class="{'vi-right': (me.profile.role=='presenter')}">                    
+                                    <md-button class="md-raised vi-btn-default" 
+                                        ng-click="zoomOut(0.1)">
+                                        <i class="fa fa-search-minus" aria-hidden="true"></i>
+                                    </md-button>
+                                    <input flex="60" class="vi-input vi-pdf-input" type="text" ng-value="zoom + '%'" disabled>
+                                    <md-button class="md-raised vi-btn-default" 
+                                        ng-click="zoomIn(0.1)">
+                                        <i class="fa fa-search-plus" aria-hidden="true"></i>
+                                    </md-button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End conference board -->
+                    </md-content>
+                  </md-tab>
+                  <md-tab label="{{'training.screenSharing' | translate}}">
+                    <md-content class="md-padding box share-screen-content">
+                        <md-button ng-show="me.profile.role=='presenter'" class="md-raised vi-success vi-btn" ng-click="shareScreen()" style="margin: 0; margin-bottom: 5px;">
+                            <i class="fa fa-desktop" aria-hidden="true"></i>
+                            {{"training.screenSharing" | translate}}
+                        </md-button>
+                        <a href="https://chrome.google.com/webstore/detail/screen-capturing/ajhifddimkapgcifgcodmmfdlknahffk">Chrome extension</a>
+                        <video id="screenCamera" autoplay muted  poster="assets/images/avatar-03.png"></video>
+                    </md-content>
+                  </md-tab>
+                  <md-tab label="{{'training.fileSharing' | translate}}">
+                    <md-content class="md-padding box share-file-training-content">
+                        <md-button ng-show="me.profile.role=='presenter'"  class="md-raised vi-success vi-btn" ngf-select="shareFile($file)" ngf-max-size="10MB" style="margin: 0 !important;">
+                            <i class="fa fa-upload" aria-hidden="true"></i>
+                            {{"training.upload" | translate}}
+                        </md-button>
+
+                        <md-list class="files-sharing-list">
+                            <md-list-item class="secondary-button-padding" ng-repeat="file in fileList">
+                                <p class="title"><a href="{{file.url}}" target="_blank">{{file.name}}</a></p>
+                                <md-button class="md-raised vi-danger vi-btn vi-btn-default" ng-click="removeFile(file)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </md-button>
+                                <md-divider ng-if="!$last"></md-divider>
+                            </md-list-item>
+                        </md-list>                    
+                    </md-content>
+                  </md-tab>
+                </md-tabs>
+            </div>
+        </div>        
+        
+        <!-- Start chat panel -->
+        <md-sidenav class="md-sidenav-right vi-chat-sidenav vi-chat-sidenav-training" 
+            md-is-locked-open="$mdMedia('min-width: 280px')"
+            md-component-id="right"
+            ng-show="!fullScreen">
+
+            <div class="presenter main box video-wrapper" layout="row" layout-wrap ng-show="me.profile.role!='presenter'">
+                <md-progress-circular 
+                    ng-show="presenter.subState == 1 || presenter.subState == 2"
+                    class="md-hue-2 md-warn progress" 
+                    ng-class="toggleVideoFlag ? 'hide-panel' : ''"
+                    md-diameter="40px">
+                </md-progress-circular>
+                <video id="remoteCamera0" controls  poster="assets/images/avatar-03.png" autoplay style="min-height: 200px;"
+                    ng-class="toggleVideoFlag ? 'hide-panel' : ''"></video>
+                <div layout="row" class="btn-group-video"
+                    ng-class="!toggleVideoFlag ? 'abs-bar' : 'static-bar'">
+                    <div flex="60">
+                        <span class="label-name">{{"training.presenter" | translate}}:
+                    {{presenter.profile.name}}</span>
+                    </div>
+                    <div flex="40" class="vi-right">
+                        <span ng-click="resubscribe(presenter.id)"
+                        class="btn-refresh"
+                        style="cursor: pointer">
+                            <i class="fa fa-refresh"></i>
+                            <md-tooltip>{{'training.refresh' | translate}}</md-tooltip>
+                        </span>
+                        <!-- <span ng-click="toggleMainVideo()"
+                        class="btn-collapse"
+                        style="cursor: pointer">
+                            <i class="fa fa-minus-square-o" aria-hidden="true"></i>
+                            <md-tooltip>{{!toggleVideoFlag ? 'training.collapse' : 'training.expand' | translate}}</md-tooltip>
+                        </span> -->
+                    </div>
+                </div>
+            </div>
+            
+            <div ng-class="(me.profile.role!='presenter') ? 'calc-sidenav-training' : 'vi-full-height'">
+                <md-tabs md-dynamic-height="true" class="box vi-custom-tabs">
+                    <md-tab label="Chat">
+                        <md-content class="md-padding">
+                            <div id="chat-content" class="chat-content chat-content-training box" style="overflow-y: auto;">
+                                <div class="chat-box-title">Chat box</div>
+                                <ul class="messages-list list-unstyled">
+                                    <li class="md-1-line message-item" ng-repeat="msg in chatMessage">
+                                        <div class="md-list-item-text" id="{{msg.idx}}">
+                                            <span class="user">{{msg.user}}: </span>
+                                            <span class="message">{{msg.text}}</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div> 
+
+                            <div layout="row" class="input-message-group-training box" ng-keypress="sendChatMessage($event)">
+                                <md-input-container flex="80">
+                                    <label>{{"training.chatMsg" | translate}}</label>
+                                    <input type="text" ng-model="chatInput">
+                                </md-input-container>
+                                <div flex="20" class="btn-send-wrapper">
+                                    <md-button class="md-fab md-mini md-primary" aria-label="Send message" ng-click="chat()">
+                                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                    </md-button>
+                                </div> 
+                            </div>             
+                        </md-content>
+                    </md-tab>
+                    
+                    <md-tab label="Videos">
+                        <md-content class="md-padding">
+                            
+                            <div layout="row" layout-wrap class="participant main members-video-panel members-video-training-panel">
+                                <div flex="50"
+                                    class="video-member video-wrapper"
+                                    ng-show="slot.allocated"
+                                    ng-repeat="slot in videoSlots | filter:byIndex">
+                                    <md-progress-circular 
+                                        ng-show="slot.member.subState == 1 || slot.member.subState == 2"
+                                        class="md-hue-2 md-warn progress" 
+                                        md-diameter="30px">
+                                    </md-progress-circular>
+                                    <video
+                                        ng-attr-id="{{ 'remoteCamera' + ($index+1) }}"
+                                        controls autoplay  poster="assets/images/avatar_1.png" style="width: 100%;"></video>
+                                    <div layout="row" class="abs-bar">
+                                        <div flex="60">
+                                            <span class="label-name">{{slot.member.profile.name}}</span>
+                                        </div>
+                                        <div flex="40" class="vi-right">
+                                            <span ng-click="resubscribe(slot.member.id)"
+                                            class="btn-refresh"
+                                            style="cursor: pointer">
+                                                <i class="fa fa-refresh"></i>
+                                            </span>
+                                            <span ng-show="me.profile.role=='presenter'" ng-click="memberDiscard(slot)" class="btn-close vi-center">
+                                                <i class="fa fa-times fa-lg"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div flex="50" ng-hide="countAllocated == 1">
+                                    <img src="assets/images/video-placeholder.png" style="width: 100%; display: block; margin-bottom: 5px;">
+                                </div>
+                                <div flex="50" ng-hide="countAllocated == 2">
+                                    <img src="assets/images/video-placeholder.png" style="width: 100%; display: block; margin-bottom: 5px;">
+                                </div>
+                                <div flex="50" ng-hide="countAllocated == 3">
+                                    <img src="assets/images/video-placeholder.png" style="width: 100%; display: block; margin-bottom: 5px;">
+                                </div>
+                            </div> 
+                        </md-content>
+                    </md-tab>
+                </md-tabs>
+            </div>            
+        </md-sidenav>
+        <!-- End chat panel -->
+    </section>
+</div>
+
+

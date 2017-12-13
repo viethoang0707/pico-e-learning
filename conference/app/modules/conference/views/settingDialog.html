@@ -1,0 +1,30 @@
+<md-dialog class="setting-dialog" aria-label="Setting">
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>{{"conference.setting" | translate}}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon aria-label="Close dialog">
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <div ng-cloak>
+      <md-content>
+        <md-tabs md-dynamic-height md-border-bottom>
+          <md-tab label="{{'general.netSpeed' | translate}}">
+            <md-content class="md-padding vi-center">
+              <show-bandwidth max="50" scale="20"></show-bandwidth>
+            </md-content>
+          </md-tab>
+          <md-tab label="{{'general.devices' | translate}}">
+            <md-content class="md-padding">
+              <show-devices></show-devices>
+            </md-content>
+          </md-tab>
+        </md-tabs>
+      </md-content>
+    </div>
+</md-dialog>

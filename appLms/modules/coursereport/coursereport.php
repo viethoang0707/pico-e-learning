@@ -2353,6 +2353,7 @@ function export() {
 
     $img_mod = '<img src="' . getPathImage() . 'standard/edit.png" alt="' . $lang->def('_MOD') . '" />';
 
+    $cont_h[] = $lang->def('_USERNAME');
     $cont_h[] = $lang->def('_DETAILS');
     $csv .= '"' . $lang->def('_DETAILS') . '"';
 
@@ -2543,7 +2544,9 @@ function export() {
     if (!empty($students_info))
         while (list($idst_user, $user_info) = each($students_info)) {
             $user_name = ( $user_info[ACL_INFO_LASTNAME] . $user_info[ACL_INFO_FIRSTNAME] ? $user_info[ACL_INFO_LASTNAME] . ' ' . $user_info[ACL_INFO_FIRSTNAME] : $acl_man->relativeId($user_info[ACL_INFO_USERID]) );
-            $csv .= '"' . $user_name . '"';
+            // get user id for course report
+            $user_id = substr($user_info[ACL_INFO_USERID],1);
+            $csv .='"' . $user_id . '"'. "\t" .'"' . $user_name . '"' ;
 
             foreach ($reports as $id_report => $info_report) {
                 switch ($info_report['source_of']) {
